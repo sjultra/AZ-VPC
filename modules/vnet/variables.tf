@@ -1,19 +1,24 @@
 variable "name_prefix" {
   description = "Name prefix of the vnet to create"
-  default     = "sjultra-vnet"
+  default     = "sjultra"
   type        = string
 }
 
-variable "vnet_address_space" {
-  description = "The address space that is used by the virtual network."
-  default     = ["10.244.0.0/16"]
-  type        = list(string)
-}
+variable "vnets" {
+  type = map(object({
+    cidr_block = string
+    subnets    = map(object({ cidr_block = string }))
+  }))
 
-variable "subnet_address_prefix" {
-  description = "The address space that is used by the virtual network."
-  default     = "10.244.0.0/24"
-  type        = string
+  default = {
+    "1" = {
+      cidr_block = "10.244.0.0/16",
+      subnets = {
+        "1" = { cidr_block = "10.244.1.0/24" },
+        "2" = { cidr_block = "10.244.2.0/24" },
+      }
+    },
+  }
 }
 
 variable "location" {
